@@ -3,23 +3,40 @@
     <h1 class="text-center my-4">Online Clothing Shop</h1>
     <ItemsList @add-to-cart="addToCart" :cart="cart" />
 
-    <!-- Button to Open Shopping Cart Modal -->
-    <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#shoppingCartModal">
-      Shopping Cart
+    <!-- Shopping Cart Button -->
+    <button
+      class="btn btn-primary shopping-cart-button"
+      data-bs-toggle="modal"
+      data-bs-target="#shoppingCartModal"
+    >
+      CART
     </button>
 
     <!-- Shopping Cart Modal -->
-    <div class="modal fade" id="shoppingCartModal" tabindex="-1" aria-labelledby="shoppingCartModalLabel"
-      aria-hidden="true">
+    <div
+      class="modal fade"
+      id="shoppingCartModal"
+      tabindex="-1"
+      aria-labelledby="shoppingCartModalLabel"
+      aria-hidden="true"
+    >
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="shoppingCartModalLabel">Shopping Cart</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
           <div class="modal-body">
-            <!-- Shopping Cart Component -->
-            <ShoppingCart :cart="cart" @remove-item="removeFromCart" @checkout="handleCheckout" />
+            <ShoppingCart
+              :cart="cart"
+              @remove-item="removeFromCart"
+              @checkout="handleCheckout"
+            />
           </div>
         </div>
       </div>
@@ -61,5 +78,22 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.shopping-cart-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+</style>
+
 
 
