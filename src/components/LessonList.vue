@@ -5,7 +5,7 @@
     <div class="d-flex justify-content-between my-3">
       <div>
         <label>Sort By:</label>
-        <select v-model="sortBy" @change="sortLessons" class="form-select">
+        <select v-model="sortBy" class="form-select">
           <option value="subject">Subject</option>
           <option value="location">Location</option>
           <option value="price">Price</option>
@@ -55,7 +55,7 @@ export default {
   data() {
     return {
       lessons: [
-        { id: 1, subject: "Algebra", location: "Canada Water", price: 50, availability: 10, image: "https://cdn.pixabay.com/photo/2016/06/13/07/59/pi-1453836_1280.jpg" },
+                { id: 1, subject: "Algebra", location: "Canada Water", price: 50, availability: 10, image: "https://cdn.pixabay.com/photo/2016/06/13/07/59/pi-1453836_1280.jpg" },
         { id: 2, subject: "Fitness", location: "Wembley", price: 40, availability: 8, image: "https://cdn.pixabay.com/photo/2017/02/01/13/53/analysis-2030265_1280.jpg" },
         { id: 3, subject: "History", location: "Hendon", price: 30, availability: 5, image: "https://cdn.pixabay.com/photo/2010/12/01/space-shuttle-774_1280.jpg" },
         { id: 4, subject: "English", location: "Mayfair", price: 25, availability: 7, image: "https://cdn.pixabay.com/photo/2017/01/12/06/53/english-1973908_1280.png" },
@@ -92,10 +92,6 @@ export default {
         lesson.availability--; // Decrease availability
       }
     },
-    sortLessons() {
-      // Change Sorting
-      this.sortedLessons();
-    },
     toggleSortOrder() {
       this.sortOrder = this.sortOrder === "asc" ? "desc" : "asc";
     },
@@ -110,8 +106,3 @@ export default {
   object-fit: cover;
 }
 </style>
-
-
-
-
-
