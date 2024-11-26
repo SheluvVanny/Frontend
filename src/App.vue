@@ -1,7 +1,11 @@
 <template>
   <div id="app" class="container">
-    <h1 class="text-center my-4">Online Clothing Shop</h1>
-    <ItemsList @add-to-cart="addToCart" :cart="cart" />
+    <h1 class="text-center my-4">Online Lesson Booking</h1>
+    <LessonList
+      :cart="cart"
+      :remaining-space="space"
+      @add-to-cart="addToCart"
+    />
 
     <!-- Shopping Cart Button -->
     <button
@@ -23,7 +27,7 @@
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="shoppingCartModalLabel">Shopping Cart</h5>
+            <h5 class="modal-title" id="shoppingCartModalLabel">Booked Lessons</h5>
             <button
               type="button"
               class="btn-close"
@@ -32,11 +36,7 @@
             ></button>
           </div>
           <div class="modal-body">
-            <ShoppingCart
-              :cart="cart"
-              @remove-item="removeFromCart"
-              @checkout="handleCheckout"
-            />
+            <ShoppingCart :cart="cart" />
           </div>
         </div>
       </div>
@@ -45,55 +45,51 @@
 </template>
 
 <script>
-import ItemsList from "./components/ItemsList.vue";
+import LessonList from "./components/LessonList.vue";
 import ShoppingCart from "./components/ShoppingCart.vue";
 
 export default {
   components: {
-    ItemsList,
+    LessonList,
     ShoppingCart,
   },
   data() {
     return {
       cart: [],
+      totalSpace: 15, // Maximum booking capacity
+      space: 15, // Remaining booking space
     };
   },
   methods: {
-    addToCart(item) {
-      const cartItem = this.cart.find((i) => i.id === item.id);
-      if (cartItem) cartItem.quantity++;
-      else this.cart.push({ ...item, quantity: 1 });
-    },
-    removeFromCart(item) {
-      const index = this.cart.indexOf(item);
-      if (index > -1) {
-        this.cart[index].availability += item.quantity;
-        this.cart.splice(index, 1);
+    addToCart(lesson) {
+      if (this.space > 0) {
+        const cartLesson = this.cart.find((l) => l.id === lesson.id);
+        if (cartLesson) {
+          cartLesson.quantity++;
+        } else {
+          this.cart.push({ ...lesson, quantity: 1 });
+        }
+        this.space--; // Reduce remaining space by 1
       }
-    },
-    handleCheckout(details) {
-      console.log("Order Submitted", details);
-      this.cart = []; // Clear cart after checkout
     },
   },
 };
 </script>
 
-<style scoped>
+<style>
+
 .shopping-cart-button {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 1000;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
+  position: fixed; 
+  bottom: 20px; 
+  right: 20px; 
+  z-index: 1000; 
+  border-radius: 50%; 
+  width: 60px; 
+  height: 60px; 
   display: flex;
   justify-content: center;
   align-items: center;
-  
 }
+
 </style>
-
-
 
