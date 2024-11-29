@@ -62,16 +62,17 @@ export default {
   },
   methods: {
     addToCart(lesson) {
-      if (this.space > 0) {
-        const cartLesson = this.cart.find((l) => l.id === lesson.id);
-        if (cartLesson) {
-          cartLesson.quantity++;
-        } else {
-          this.cart.push({ ...lesson, quantity: 1 });
-        }
-        this.space--; // Reduce remaining space by 1
-      }
-    },
+  if (this.space > 0) {
+    const cartLesson = this.cart.find((l) => l.id === lesson.id);
+    if (cartLesson) {
+      cartLesson.quantity++;
+    } else {
+      this.cart.push({ ...lesson, quantity: 1 });
+    }
+    this.space--; // Reduce remaining space by 1
+  }
+}
+
   },
 };
 </script>

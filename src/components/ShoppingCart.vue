@@ -1,9 +1,11 @@
 <template>
     <div>
+        <!-- Display cart items -->
         <ul v-if="cart.length > 0" class="list-group">
             <li v-for="item in cart" :key="item.id"
                 class="list-group-item d-flex justify-content-between align-items-center">
-                {{ item.name }} ({{ item.quantity }})
+                <!-- Display lesson subject -->
+                {{ item.subject }} ({{ item.quantity }})
                 <button @click="removeFromCart(item)" class="btn btn-danger btn-sm">
                     Remove
                 </button>
@@ -11,6 +13,7 @@
         </ul>
         <p v-else>Your cart is empty!</p>
 
+        <!-- Checkout form -->
         <div v-if="cart.length > 0" class="mt-4">
             <h6>Checkout</h6>
             <form @submit.prevent="checkout">
@@ -64,10 +67,11 @@ export default {
 </script>
 
 <style scoped>
-/* Specific styles for the cart */
+/* Styles for the cart */
 .list-group-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 </style>
+
