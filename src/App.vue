@@ -71,8 +71,13 @@ export default {
     }
     this.space--; // Reduce remaining space by 1
   }
-}
-
+    },
+    removeFromCart(item) {
+      const index = this.cart.indexOf(item);
+      if (index !== -1) {
+        this.cart.splice(index, 1); // Remove the item from the cart
+      }
+    },
   },
 };
 </script>
