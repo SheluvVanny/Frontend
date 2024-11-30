@@ -5,7 +5,7 @@
             <li v-for="item in cart" :key="item.id"
                 class="list-group-item d-flex justify-content-between align-items-center">
                 <!-- Display lesson subject -->
-                {{ item.subject }} ({{ item.quantity }})
+                {{ item.subject }} ({{ item.quantity }} x ${{ item.price }})
                 <button @click="removeFromCart(item)" class="btn btn-danger btn-sm">
                     Remove
                 </button>
@@ -47,19 +47,54 @@ export default {
         isFormValid() {
             const nameValid = /^[a-zA-Z\s]+$/.test(this.name);
             const phoneValid = /^[0-9]+$/.test(this.phone);
-            return nameValid && phoneValid;
+            return nameValid && phoneValid && this.cart.length > 0;
         },
     },
     methods: {
         removeFromCart(item) {
             this.$emit("remove-item", item);
         },
-        checkout() {
-            if (this.isFormValid) {
-                this.$emit("checkout", { name: this.name, phone: this.phone });
-                alert("Order Submitted Successfully!");
-            } else {
+        async checkout() {
+            if (!this.isFormValid) {
                 alert("Invalid Form Details");
+                return;
+            }
+
+            // Order object
+            const orderData = {
+                name: this.name,
+                phone: this.phone,
+                items: this.cart.map(item => ({
+                    id: item.id,
+                    subject: item.subject,
+                    quantity: item.quantity,
+                    price: item.price
+                }))
+            };
+
+            try {
+                const response = await fetch("http://localhost:5000/api/orders", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(orderData),
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to submit order");
+                }
+
+                const data = await response.json();
+                alert(`Order Submitted Successfully! Order ID: ${data.orderId}`);
+
+                // Reset the form and clear the cart
+                this.name = "";
+                this.phone = "";
+                this.$emit("clear-cart");
+            } catch (error) {
+                console.error("Error submitting order:", error);
+                alert("Failed to submit order. Please try again.");
             }
         },
     },
@@ -74,4 +109,5 @@ export default {
     align-items: center;
 }
 </style>
+
 
