@@ -9,19 +9,13 @@
           <option value="subject">Subject</option>
           <option value="location">Location</option>
           <option value="price">Price</option>
-          <option value="availability">Availability</option>
         </select>
-      </div>
-      <div>
-        <button @click="toggleSortOrder" class="btn btn-secondary">
-          {{ sortOrder === 'asc' ? 'Ascending' : 'Descending' }}
-        </button>
       </div>
     </div>
 
     <!-- Lesson Cards -->
     <div class="row">
-      <div v-for="lesson in sortedLessons" :key="lesson.id" class="col-md-4">
+      <div v-for="lesson in sortedLessons" :key="lesson._id" class="col-md-4">
         <div class="card mb-4">
           <img
             :src="lesson.image"
@@ -51,51 +45,43 @@
 </template>
 
 <script>
+import { BASE_URL } from "../config.js";
+
 export default {
   props: ["cart", "remainingSpace"],
   data() {
     return {
-      lessons: [], // Initialize as empty
+      lessons: [],
       sortBy: "subject",
-      sortOrder: "asc",
     };
   },
   computed: {
     sortedLessons() {
-      const sorted = [...this.lessons];
-      sorted.sort((a, b) => {
-        if (this.sortOrder === "asc") {
-          return a[this.sortBy] > b[this.sortBy] ? 1 : -1;
-        } else {
-          return a[this.sortBy] < b[this.sortBy] ? 1 : -1;
-        }
+      return [...this.lessons].sort((a, b) => {
+        if (this.sortBy === "price") return a.price - b.price;
+        return a[this.sortBy].localeCompare(b[this.sortBy]);
       });
-      return sorted;
     },
   },
   methods: {
     async fetchLessons() {
       try {
-        const response = await fetch("http://localhost:5000/api/lessons");
-        if (!response.ok) throw new Error("Failed to fetch lessons");
+        const response = await fetch(`${BASE_URL}/lessons`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch lessons");
+        }
         this.lessons = await response.json();
-        console.log("Fetched lessons:", this.lessons); // Debug log
       } catch (error) {
         console.error("Error fetching lessons:", error);
       }
     },
     addToCart(lesson) {
-      if (this.remainingSpace > 0 && lesson.availability > 0) {
-        this.$emit("add-to-cart", lesson);
-        lesson.availability--; // Decrease availability
-      }
-    },
-    toggleSortOrder() {
-      this.sortOrder = this.sortOrder === "asc" ? "desc" : "asc";
+      this.$emit("add-to-cart", lesson);
+      lesson.availability--;
     },
   },
-  mounted() {
-    this.fetchLessons(); // Fetch lessons on component mount
+  created() {
+    this.fetchLessons();
   },
 };
 </script>
@@ -107,4 +93,5 @@ export default {
   object-fit: cover;
 }
 </style>
+
 
