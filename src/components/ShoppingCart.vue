@@ -82,5 +82,11 @@ export default {
 };
 </script>
 
-
-
+<style scoped>
+/* Styles for the cart */
+.list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+</style>
